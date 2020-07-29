@@ -39,7 +39,7 @@
                             @csrf
                             <div class="form-group">
                                 <label>Store</label>
-                                <select class="form-control col-12" name="store" id="store" required>
+                                <select class="form-control col-12 jstags" name="store" id="store" required>
                                     <option value="" selected disabled>None selected</option>
                                     @foreach ($response as $index => $store )
                                     <option value="{{$store->_id}}">{{$store->store_name}}</option>
@@ -47,7 +47,14 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Customer(s)</label>
+                                <label>Send To</label>
+                                <select class="form-control col-12" name="send_to" id="send_to" required>
+                                    <option value="1"> All Customers</option>
+                                    <option value="2"> Selected Customers</option>
+                                </select>
+                            </div>
+                            <div class="form-group d-none" id='customersGroup'>
+                                <label>Select Customer(s)</label>
                                 <select class="form-control col-12 jstags" multiple  name="customer[]">
 
                                 </select>
@@ -167,6 +174,14 @@
                 });
             } else {
                 $('select[name="store"]').empty();
+            }
+        });
+
+        $('#send_to').change(function(){
+            if ($(this).val() == '2') {
+                $('#customersGroup').removeClass('d-none');
+            } else {
+                $('#customersGroup').addClass('d-none');
             }
         });
 
