@@ -73,7 +73,7 @@
                             </div>
                             <div class="form-group" id="txtarea">
                                 <label for="exampleFormControlTextarea1">Your Custom Message</label>
-                                <textarea class="form-control" name="message" rows="3"></textarea>
+                                <textarea class="form-control" name="_message" rows="3"></textarea>
                             </div>
                     </div>
 
@@ -167,7 +167,7 @@
                         var i;
                         new_data.forEach(customer => {
                             $('select[name="customer[]"]').append('<option multiple value="' +
-                                customer._id + '">' +
+                                customer.phone_number + '">' +
                                 customer.name + '</option>');
                         });
                     }

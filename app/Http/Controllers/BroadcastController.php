@@ -7,6 +7,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Session;
 
 class BroadcastController extends Controller
 {
@@ -48,7 +49,7 @@ class BroadcastController extends Controller
             }
         } catch (RequestException $e) {
             Log::error('Catch error: Create Broadcast' . $e->getMessage());
-            $response->session()->flash('message', 'Failed to fetch customer, please try again');
+            Session::flash('message', 'Failed to fetch customer, please try again');
             return view('backend.broadcasts.index');
         }
     }
@@ -98,18 +99,24 @@ class BroadcastController extends Controller
                     ['headers' => ['x-access-token' => Cookie::get('api_token')]]
                 );
                 $customers =  json_decode($store->getBody())->data->store->customers;
-                $customerIds = [];
+                $numbers = [];
                 foreach ($customers as $customer) {
-                    $customerIds[] = $customer->_id;
+                    $numbers[] = $customer->phone_number;
                 }
             } else {
-                $customerIds = $request->input('customer');
+                $numbers = $request->input('customer');
+            }
+
+            $message = $request->input('message');
+
+            if ($request->input('message') == 'other') {
+                $message = $request->input('_message');
             }
 
             $response = $client->post($this->host . '/message/send', [
                 'json' => [
-                    'message' => $request->input('message'),
-                    'numbers' => $customerIds,
+                    'message' => $message,
+                    'numbers' => $numbers,
                 ],
                 'headers' => [
                     'x-access-token' => Cookie::get('api_token')
@@ -123,11 +130,10 @@ class BroadcastController extends Controller
             }
         } catch (RequestException $e) {
             Log::error('Catch error: Create Broadcast' . $e->getMessage());
-            $request->session()->flash('message', 'Ooops, failed to send broadcast, please try again');
-            if ($e->getStatusCode() == 401) {
-
+            if ($e->getCode() == 401) {
                 return redirect()->route("logout");
             }
+            $request->session()->flash('message', 'Ooops, failed to send broadcast, please try again');
             return back();
         }
     }
