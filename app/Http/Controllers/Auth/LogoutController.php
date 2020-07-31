@@ -31,11 +31,12 @@ class LogoutController extends Controller
         Cookie::queue(Cookie::forget('email'));
         Cookie::queue(Cookie::forget('user_role'));
         Cookie::queue(Cookie::forget('expires'));
+        Cookie::queue(Cookie::forget('is_first_time_user'));
 
-        Cookie::queue(Cookie::forget('account_name'));
-        Cookie::queue(Cookie::forget('account_number'));
-        Cookie::queue(Cookie::forget('account_bank'));
-        Cookie::queue(Cookie::forget('currency'));
+        // Cookie::queue(Cookie::forget('account_name'));
+        // Cookie::queue(Cookie::forget('account_number'));
+        // Cookie::queue(Cookie::forget('account_bank'));
+        // Cookie::queue(Cookie::forget('currency'));
 
         $request->session()->invalidate();
         return redirect()->route('login');

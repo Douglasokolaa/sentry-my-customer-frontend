@@ -176,23 +176,23 @@ class LoginController extends Controller
 
                     Cookie::queue('is_first_time_user', false);
                     
-                    // Financial info 
-                    $userRole = $response->data->user->local->user_role;
-                    if ($userRole == 'store_admin') {
-                        if (isset($response->data->user->bank_details)) {
-                            $bank_details = $response->data->user->bank_details;
-                            Cookie::queue('account_name', $bank_details->account_name);
-                            Cookie::queue('account_number', $bank_details->account_number);
-                            Cookie::queue('account_bank', $bank_details->bank);
-                        } else {
-                            Cookie::queue('account_name', '');
-                            Cookie::queue('account_number', '');
-                            Cookie::queue('account_bank', '');
-                        }
-                        Cookie::queue('currency',  $response->data->user->currencyPreference);
-                    } elseif ($userRole == 'store_assistant') {
-                        Cookie::queue('currency',  $response->data->user->currencyPreference);
-                    }
+                    // // Financial info 
+                    // $userRole = $response->data->user->local->user_role;
+                    // if ($userRole == 'store_admin') {
+                    //     if (isset($response->data->user->bank_details)) {
+                    //         $bank_details = $response->data->user->bank_details;
+                    //         Cookie::queue('account_name', $bank_details->account_name);
+                    //         Cookie::queue('account_number', $bank_details->account_number);
+                    //         Cookie::queue('account_bank', $bank_details->bank);
+                    //     } else {
+                    //         Cookie::queue('account_name', '');
+                    //         Cookie::queue('account_number', '');
+                    //         Cookie::queue('account_bank', '');
+                    //     }
+                    //     Cookie::queue('currency',  $response->data->user->currencyPreference);
+                    // } elseif ($userRole == 'store_assistant') {
+                    //     Cookie::queue('currency',  $response->data->user->currencyPreference);
+                    // }
                     
                     //show success message
                     $request->session()->flash('alert-class', 'alert-success');
